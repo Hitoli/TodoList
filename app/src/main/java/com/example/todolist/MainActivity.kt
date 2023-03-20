@@ -1,8 +1,10 @@
 package com.example.todolist
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import com.example.todolist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +28,23 @@ class MainActivity : AppCompatActivity() {
             filehelp.writedata(itemlist,applicationContext)
             arrayAdapter.notifyDataSetChanged()
         }
+        binding.itemlistview.setOnItemClickListener { parent, view, position, id ->
+            val alert = AlertDialog.Builder(this)
+            alert.setTitle("Delete")
+            alert.setMessage("Do you want to delete this item?")
+            alert.setCancelable(false)
+            alert.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+                dialog.cancel()
+            })
+            alert.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+                itemlist.removeAt(position)
+                arrayAdapter.notifyDataSetChanged()
+                filehelp.writedata(itemlist,applicationContext)
+            })
+            alert.create().show()
+        }
+
+
 
 
 
